@@ -16,6 +16,9 @@ namespace DesktopAppSearchFiles
             set => searchFilesTextBox.Text = value;
         }
 
+        private int CountFiles = 0;
+        private int CountFilesFound = 0;
+
         private bool _stopSearching = true;
         private Stopwatch _stopwatch = new Stopwatch();                     // секундомер
 

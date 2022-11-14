@@ -30,7 +30,9 @@ namespace DesktopAppSearchFiles
             if (e.ChangeType != WatcherChangeTypes.Deleted)
                 return;
 
-            ChangeTreeView(DeleteNode, e.Name, null);
+            var deletedFile = Path.GetFileName(e.Name);
+
+            ChangeTreeView(DeleteNode, deletedFile, null);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
@@ -70,11 +72,20 @@ namespace DesktopAppSearchFiles
 
             void Change()
             {
-                var changeNode = DirectoryTreeHelper.GetNode(filesTreeView.Nodes, searchNode);
-
-                filesTreeView.BeginUpdate();
-                changeAction.Invoke(changeNode, newNode);
-                filesTreeView.EndUpdate();
+                try
+                {
+                    var changeNode = DirectoryTreeHelper.GetNode(filesTreeView.Nodes, searchNode);
+                    filesTreeView.BeginUpdate();
+                    changeAction.Invoke(changeNode, newNode);
+                    filesTreeView.EndUpdate();
+                }
+                catch (NodeNotFound ex)
+                {
+                    var result = MessageBox.Show("Не удалось обновить дерево файлов. Обновить повторно?", "Error", MessageBoxButtons.OKCancel);
+                    
+                    if(result == DialogResult.OK)
+                        SetDirectoryTreeView();         // В случае ошибки происходит глобальное обновление дерева.
+                }
             }
         }
     }

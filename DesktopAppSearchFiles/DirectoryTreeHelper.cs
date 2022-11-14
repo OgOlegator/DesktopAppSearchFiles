@@ -34,6 +34,8 @@ namespace DesktopAppSearchFiles
 
         public static TreeNode GetNode(TreeNodeCollection nodes, string searchName)
         {
+            //todo У TreeNode есть свойство содержащее путь к файлу, нужно сделать так, чтобы поиск осуществлялся по этому пути
+            //сейчас поиск происходит по имени файла
             foreach (TreeNode node in nodes)
             {
                 if (node.Text == searchName)
