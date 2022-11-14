@@ -96,11 +96,8 @@ namespace DesktopAppSearchFiles
         {
             using (BinaryWriter file = new BinaryWriter(File.Create(Constants.LastSearchParametersFileName)))
             {
-                if(!string.IsNullOrEmpty(StartDirectory))
-                    file.Write(StartDirectory);
-
-                if (!string.IsNullOrEmpty(SearchFilesPattern))
-                    file.Write(SearchFilesPattern);
+                file.Write(StartDirectory);
+                file.Write(SearchFilesPattern);
             }
         }
 

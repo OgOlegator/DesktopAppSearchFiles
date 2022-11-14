@@ -76,12 +76,6 @@ namespace DesktopAppSearchFiles
         private void DeleteNode(TreeNode changeNode, string _)
             => changeNode.Nodes.Remove(changeNode);
 
-        private bool IsDirectory(string path)
-            => DirectoryHelper.IsDirectory(Path.GetDirectoryName(path), Path.GetFileName(path));
-
-        private bool IsPattern(string checkFile)
-            => Regex.IsMatch(checkFile, SearchFilesPattern);
-
         private void ChangeTreeView(Action<TreeNode, string> changeAction, string searchNode, string newNode)
         {
             if (filesTreeView.InvokeRequired)
@@ -107,5 +101,11 @@ namespace DesktopAppSearchFiles
                 }
             }
         }
+
+        private bool IsDirectory(string path)
+            => DirectoryHelper.IsDirectory(Path.GetDirectoryName(path), Path.GetFileName(path));
+
+        private bool IsPattern(string checkFile)
+            => Regex.IsMatch(checkFile, SearchFilesPattern);
     }
 }
