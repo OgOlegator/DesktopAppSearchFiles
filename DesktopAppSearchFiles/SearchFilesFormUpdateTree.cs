@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Text.RegularExpressions;
 
 namespace DesktopAppSearchFiles
 {
@@ -32,6 +32,10 @@ namespace DesktopAppSearchFiles
 
             var deletedFile = Path.GetFileName(e.Name);
 
+            if (!IsDirectory(e.FullPath)
+                || !IsPattern(deletedFile))
+                return;
+
             ChangeTreeView(DeleteNode, deletedFile, null);
         }
 
@@ -40,8 +44,13 @@ namespace DesktopAppSearchFiles
             if (e.ChangeType != WatcherChangeTypes.Created)
                 return;
 
-            var parent = Path.GetFileName(Path.GetDirectoryName(e.FullPath));
             var newNode = Path.GetFileName(e.FullPath);
+
+            if (!IsDirectory(e.FullPath)
+                || !IsPattern(newNode))
+                return;
+
+            var parent = Path.GetFileName(Path.GetDirectoryName(e.FullPath));
 
             ChangeTreeView(CreateNode, parent, newNode);
         }
@@ -49,6 +58,10 @@ namespace DesktopAppSearchFiles
         private void OnRenamed(object source, RenamedEventArgs e)
         {
             if (e.ChangeType != WatcherChangeTypes.Renamed)
+                return;
+
+            if (!IsDirectory(e.FullPath)
+                || !IsPattern(e.Name))
                 return;
 
             ChangeTreeView(RenameNode, e.OldName, e.Name);
@@ -63,6 +76,12 @@ namespace DesktopAppSearchFiles
         private void DeleteNode(TreeNode changeNode, string _)
             => changeNode.Nodes.Remove(changeNode);
 
+        private bool IsDirectory(string path)
+            => DirectoryHelper.IsDirectory(Path.GetDirectoryName(path), Path.GetFileName(path));
+
+        private bool IsPattern(string checkFile)
+            => Regex.IsMatch(checkFile, SearchFilesPattern);
+
         private void ChangeTreeView(Action<TreeNode, string> changeAction, string searchNode, string newNode)
         {
             if (filesTreeView.InvokeRequired)
@@ -74,7 +93,7 @@ namespace DesktopAppSearchFiles
             {
                 try
                 {
-                    var changeNode = DirectoryTreeHelper.GetNode(filesTreeView.Nodes, searchNode);
+                    var changeNode = TreeNodeHelper.GetNode(filesTreeView.Nodes, searchNode);
                     filesTreeView.BeginUpdate();
                     changeAction.Invoke(changeNode, newNode);
                     filesTreeView.EndUpdate();

@@ -16,8 +16,17 @@ namespace DesktopAppSearchFiles
             set => searchFilesTextBox.Text = value;
         }
 
-        private int CountFiles = 0;
-        private int CountFilesFound = 0;
+        private string CountFiles
+        {
+            get => labelCountFiles.Text;
+            set => labelCountFiles.Text = value;
+        }
+
+        private string CountFilesFound
+        {
+            get => labelCountFilesFound.Text;
+            set => labelCountFilesFound.Text = value;
+        }
 
         private bool _stopSearching = true;
         private Stopwatch _stopwatch = new Stopwatch();                     // секундомер
@@ -31,11 +40,25 @@ namespace DesktopAppSearchFiles
 
         private void searchButton_Click(object sender, EventArgs e)
         {
+            if(string.IsNullOrWhiteSpace(StartDirectory))
+            {
+                MessageBox.Show("ѕеред началом поиска установите значение стартовой директории");
+                return;
+            }    
+            
             _stopSearching = false;
 
             StartTimer();
 
-            SetEventFileSystemWatcher();
+            try
+            {
+                SetEventFileSystemWatcher();
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show("”становите корректное значение стартовой директории");
+                return;
+            }
 
             SetDirectoryTreeView();
 
@@ -50,7 +73,10 @@ namespace DesktopAppSearchFiles
 
             var treeNode = new TreeNode { Text = Path.GetFileName(StartDirectory) };
 
-            DirectoryTreeHelper.Fill(treeNode, StartDirectory, SearchFilesPattern);
+            DirectoryHelper.Fill(treeNode, StartDirectory, SearchFilesPattern, out var countFiles, out var countFilesFound);
+
+            CountFiles = countFiles.ToString();
+            CountFilesFound = countFilesFound.ToString();
 
             filesTreeView.Nodes.Add(treeNode);
         }
@@ -70,8 +96,11 @@ namespace DesktopAppSearchFiles
         {
             using (BinaryWriter file = new BinaryWriter(File.Create(Constants.LastSearchParametersFileName)))
             {
-                file.Write(StartDirectory);
-                file.Write(SearchFilesPattern);
+                if(!string.IsNullOrEmpty(StartDirectory))
+                    file.Write(StartDirectory);
+
+                if (!string.IsNullOrEmpty(SearchFilesPattern))
+                    file.Write(SearchFilesPattern);
             }
         }
 
@@ -94,8 +123,6 @@ namespace DesktopAppSearchFiles
         private void FillAdditionalInfo()
         {
             labelNameSearchDirectory.Text = StartDirectory;
-            labelCountFiles.Text = "";
-            labelCountFilesFound.Text = filesTreeView.Nodes.Count.ToString();
         }
 
         private void StartTimer()
