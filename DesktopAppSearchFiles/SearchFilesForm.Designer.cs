@@ -45,7 +45,7 @@
             this.labelCountFilesFound = new System.Windows.Forms.Label();
             this.labelCountFiles = new System.Windows.Forms.Label();
             this.labelTimeAfterSearch = new System.Windows.Forms.Label();
-            this.buttonSearchFileInPC = new System.Windows.Forms.Button();
+            this.buttonSelectFileInPC = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // startDirectoryTextBox
@@ -197,22 +197,22 @@
             this.labelTimeAfterSearch.Size = new System.Drawing.Size(0, 20);
             this.labelTimeAfterSearch.TabIndex = 15;
             // 
-            // buttonSearchFileInPC
+            // buttonSelectFileInPC
             // 
-            this.buttonSearchFileInPC.Location = new System.Drawing.Point(534, 4);
-            this.buttonSearchFileInPC.Name = "buttonSearchFileInPC";
-            this.buttonSearchFileInPC.Size = new System.Drawing.Size(94, 29);
-            this.buttonSearchFileInPC.TabIndex = 16;
-            this.buttonSearchFileInPC.Text = "Обзор";
-            this.buttonSearchFileInPC.UseVisualStyleBackColor = true;
-            this.buttonSearchFileInPC.Click += new System.EventHandler(this.buttonSearchFileInPC_Click);
+            this.buttonSelectFileInPC.Location = new System.Drawing.Point(534, 4);
+            this.buttonSelectFileInPC.Name = "buttonSelectFileInPC";
+            this.buttonSelectFileInPC.Size = new System.Drawing.Size(94, 29);
+            this.buttonSelectFileInPC.TabIndex = 16;
+            this.buttonSelectFileInPC.Text = "Обзор";
+            this.buttonSelectFileInPC.UseVisualStyleBackColor = true;
+            this.buttonSelectFileInPC.Click += new System.EventHandler(this.buttonSelectFileInPC_Click);
             // 
             // SearchFilesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(646, 485);
-            this.Controls.Add(this.buttonSearchFileInPC);
+            this.Controls.Add(this.buttonSelectFileInPC);
             this.Controls.Add(this.labelTimeAfterSearch);
             this.Controls.Add(this.labelCountFiles);
             this.Controls.Add(this.labelCountFilesFound);
@@ -254,6 +254,6 @@
         private Label labelCountFilesFound;
         private Label labelCountFiles;
         private Label labelTimeAfterSearch;
-        private Button buttonSearchFileInPC;
+        private Button buttonSelectFileInPC;
     }
 }

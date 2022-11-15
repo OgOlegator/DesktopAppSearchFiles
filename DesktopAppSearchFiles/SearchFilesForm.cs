@@ -141,7 +141,7 @@ namespace DesktopAppSearchFiles
             labelTimeAfterSearch.Text = _stopwatch.Elapsed.ToString("mm\\:ss");
         }
 
-        private void buttonSearchFileInPC_Click(object sender, EventArgs e)
+        private void buttonSelectFileInPC_Click(object sender, EventArgs e)
         {
             using (var folderBrowserDialog = new FolderBrowserDialog())
             {
