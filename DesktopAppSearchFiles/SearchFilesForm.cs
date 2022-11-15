@@ -140,5 +140,17 @@ namespace DesktopAppSearchFiles
 
             labelTimeAfterSearch.Text = _stopwatch.Elapsed.ToString("mm\\:ss");
         }
+
+        private void buttonSearchFileInPC_Click(object sender, EventArgs e)
+        {
+            using (var folderBrowserDialog = new FolderBrowserDialog())
+            {
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    StartDirectory = folderBrowserDialog.SelectedPath;
+                }
+            }
+        }
     }
 }
