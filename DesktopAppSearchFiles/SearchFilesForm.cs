@@ -126,19 +126,19 @@ namespace DesktopAppSearchFiles
         {
             _stopwatch.Reset();
             _stopwatch.Start();
-            timerAfterSearch.Start();
+            timerAfterStartSearch.Start();
         }
 
-        private void timerAfterSearch_Tick(object sender, EventArgs e)
+        private void timerAfterStartSearch_Tick(object sender, EventArgs e)
         {
             if(_stopSearching)
             {
                 _stopwatch.Stop();
-                timerAfterSearch.Stop();
+                timerAfterStartSearch.Stop();
                 return;
             }
 
-            labelTimeAfterSearch.Text = _stopwatch.Elapsed.ToString("mm\\:ss");
+            labelTimeAfterStartSearch.Text = _stopwatch.Elapsed.ToString("mm\\:ss");
         }
 
         private void buttonSelectFileInPC_Click(object sender, EventArgs e)

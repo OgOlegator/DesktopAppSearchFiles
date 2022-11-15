@@ -39,12 +39,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.countSearchFilesLabel = new System.Windows.Forms.Label();
             this.countFilesLabel = new System.Windows.Forms.Label();
-            this.timerAfterSearch = new System.Windows.Forms.Timer(this.components);
+            this.timerAfterStartSearch = new System.Windows.Forms.Timer(this.components);
             this.label4 = new System.Windows.Forms.Label();
             this.labelNameSearchDirectory = new System.Windows.Forms.Label();
             this.labelCountFilesFound = new System.Windows.Forms.Label();
             this.labelCountFiles = new System.Windows.Forms.Label();
-            this.labelTimeAfterSearch = new System.Windows.Forms.Label();
+            this.labelTimeAfterStartSearch = new System.Windows.Forms.Label();
             this.buttonSelectFileInPC = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -146,10 +146,10 @@
             this.countFilesLabel.TabIndex = 9;
             this.countFilesLabel.Text = "Всего файлов:";
             // 
-            // timerAfterSearch
+            // timerAfterStartSearch
             // 
-            this.timerAfterSearch.Interval = 1000;
-            this.timerAfterSearch.Tick += new System.EventHandler(this.timerAfterSearch_Tick);
+            this.timerAfterStartSearch.Interval = 1000;
+            this.timerAfterStartSearch.Tick += new System.EventHandler(this.timerAfterStartSearch_Tick);
             // 
             // label4
             // 
@@ -188,14 +188,14 @@
             this.labelCountFiles.Size = new System.Drawing.Size(0, 20);
             this.labelCountFiles.TabIndex = 14;
             // 
-            // labelTimeAfterSearch
+            // labelTimeAfterStartSearch
             // 
-            this.labelTimeAfterSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelTimeAfterSearch.AutoSize = true;
-            this.labelTimeAfterSearch.Location = new System.Drawing.Point(207, 459);
-            this.labelTimeAfterSearch.Name = "labelTimeAfterSearch";
-            this.labelTimeAfterSearch.Size = new System.Drawing.Size(0, 20);
-            this.labelTimeAfterSearch.TabIndex = 15;
+            this.labelTimeAfterStartSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelTimeAfterStartSearch.AutoSize = true;
+            this.labelTimeAfterStartSearch.Location = new System.Drawing.Point(207, 459);
+            this.labelTimeAfterStartSearch.Name = "labelTimeAfterStartSearch";
+            this.labelTimeAfterStartSearch.Size = new System.Drawing.Size(0, 20);
+            this.labelTimeAfterStartSearch.TabIndex = 15;
             // 
             // buttonSelectFileInPC
             // 
@@ -213,7 +213,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(646, 485);
             this.Controls.Add(this.buttonSelectFileInPC);
-            this.Controls.Add(this.labelTimeAfterSearch);
+            this.Controls.Add(this.labelTimeAfterStartSearch);
             this.Controls.Add(this.labelCountFiles);
             this.Controls.Add(this.labelCountFilesFound);
             this.Controls.Add(this.labelNameSearchDirectory);
@@ -248,12 +248,12 @@
         private Label label3;
         private Label countSearchFilesLabel;
         private Label countFilesLabel;
-        private System.Windows.Forms.Timer timerAfterSearch;
+        private System.Windows.Forms.Timer timerAfterStartSearch;
         private Label label4;
         private Label labelNameSearchDirectory;
         private Label labelCountFilesFound;
         private Label labelCountFiles;
-        private Label labelTimeAfterSearch;
+        private Label labelTimeAfterStartSearch;
         private Button buttonSelectFileInPC;
     }
 }
