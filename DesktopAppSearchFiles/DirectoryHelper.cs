@@ -44,8 +44,5 @@ namespace DesktopAppSearchFiles
                 directoryNode.Nodes.Add(subDirNode);
             }
         }
-
-        public static bool IsDirectory(string pathParentDir, string checkDir)
-            => Directory.GetDirectories(pathParentDir, checkDir).Count() == 0;
     }
 }

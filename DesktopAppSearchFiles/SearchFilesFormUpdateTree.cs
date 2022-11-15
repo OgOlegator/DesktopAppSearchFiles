@@ -32,10 +32,6 @@ namespace DesktopAppSearchFiles
 
             var deletedFile = Path.GetFileName(e.Name);
 
-            if (!IsDirectory(e.FullPath)
-                || !IsPattern(deletedFile))
-                return;
-
             ChangeTreeView(DeleteNode, deletedFile, null);
         }
 
@@ -46,8 +42,8 @@ namespace DesktopAppSearchFiles
 
             var newNode = Path.GetFileName(e.FullPath);
 
-            if (!IsDirectory(e.FullPath)
-                || !IsPattern(newNode))
+            if (File.Exists(e.FullPath)
+                && !IsPattern(newNode))
                 return;
 
             var parent = Path.GetFileName(Path.GetDirectoryName(e.FullPath));
@@ -60,9 +56,9 @@ namespace DesktopAppSearchFiles
             if (e.ChangeType != WatcherChangeTypes.Renamed)
                 return;
 
-            if (!IsDirectory(e.FullPath)
-                || !IsPattern(e.Name))
-                return;
+            if (File.Exists(e.FullPath)
+                && !IsPattern(e.Name))
+                    return;
 
             ChangeTreeView(RenameNode, e.OldName, e.Name);
         }
@@ -101,9 +97,6 @@ namespace DesktopAppSearchFiles
                 }
             }
         }
-
-        private bool IsDirectory(string path)
-            => DirectoryHelper.IsDirectory(Path.GetDirectoryName(path), Path.GetFileName(path));
 
         private bool IsPattern(string checkFile)
             => Regex.IsMatch(checkFile, SearchFilesPattern);
