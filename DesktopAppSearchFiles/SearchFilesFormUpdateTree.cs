@@ -30,7 +30,7 @@ namespace DesktopAppSearchFiles
             if (e.ChangeType != WatcherChangeTypes.Deleted)
                 return;
 
-            var pathChange = GetPath(e.FullPath);
+            var pathChange = GetPathInTree(e.FullPath);
 
             ChangeTreeView(DeleteNode, pathChange, null);
         }
@@ -45,7 +45,7 @@ namespace DesktopAppSearchFiles
             if (CheckChangeObject(e.FullPath, newNode))
                 return;
 
-            var pathChange = GetPath(Path.GetDirectoryName(e.FullPath));
+            var pathChange = GetPathInTree(Path.GetDirectoryName(e.FullPath));
 
             ChangeTreeView(CreateNode, pathChange, newNode);
         }
@@ -60,7 +60,7 @@ namespace DesktopAppSearchFiles
             if (CheckChangeObject(e.FullPath, newName))
                     return;
 
-            var pathChange = GetPath(e.OldFullPath);
+            var pathChange = GetPathInTree(e.OldFullPath);
 
             ChangeTreeView(RenameNode, pathChange, newName);
         }
@@ -103,7 +103,7 @@ namespace DesktopAppSearchFiles
         private bool CheckChangeObject(string path, string node)
             => File.Exists(path) && !Regex.IsMatch(node, SearchFilesPattern);
 
-        private string GetPath(string path)
+        private string GetPathInTree(string path) 
         {
             var nameStart = Path.GetFileName(StartDirectory);
 
