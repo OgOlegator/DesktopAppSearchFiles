@@ -9,13 +9,11 @@ namespace DesktopAppSearchFiles
     public class TreeNodeHelper
     {
 
-        public static TreeNode GetNode(TreeNodeCollection nodes, string searchName)
+        public static TreeNode GetNode(TreeNodeCollection nodes, string searchPath)
         {
-            //todo У TreeNode есть свойство содержащее путь к файлу, нужно сделать так, чтобы поиск осуществлялся по этому пути
-            //сейчас поиск происходит по имени файла
             foreach (TreeNode node in nodes)
             {
-                if (node.Text == searchName)
+                if (node.FullPath == searchPath)
                 {
                     return node;
                 }
@@ -26,7 +24,7 @@ namespace DesktopAppSearchFiles
 
                     try
                     {
-                        var changeNode = GetNode(node.Nodes, searchName);
+                        var changeNode = GetNode(node.Nodes, searchPath);
                         return changeNode;
                     }
                     catch (NodeNotFound ex)
@@ -38,6 +36,5 @@ namespace DesktopAppSearchFiles
 
             throw new NodeNotFound();
         }
-
     }
 }

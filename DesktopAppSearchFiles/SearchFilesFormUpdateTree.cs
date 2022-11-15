@@ -30,9 +30,9 @@ namespace DesktopAppSearchFiles
             if (e.ChangeType != WatcherChangeTypes.Deleted)
                 return;
 
-            var deletedFile = Path.GetFileName(e.Name);
+            var pathChange = GetPath(e.FullPath);
 
-            ChangeTreeView(DeleteNode, deletedFile, null);
+            ChangeTreeView(DeleteNode, pathChange, null);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
@@ -42,13 +42,12 @@ namespace DesktopAppSearchFiles
 
             var newNode = Path.GetFileName(e.FullPath);
 
-            if (File.Exists(e.FullPath)
-                && !IsPattern(newNode))
+            if (CheckChangeObject(e.FullPath, newNode))
                 return;
 
-            var parent = Path.GetFileName(Path.GetDirectoryName(e.FullPath));
+            var pathChange = GetPath(Path.GetDirectoryName(e.FullPath));
 
-            ChangeTreeView(CreateNode, parent, newNode);
+            ChangeTreeView(CreateNode, pathChange, newNode);
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)
@@ -56,11 +55,14 @@ namespace DesktopAppSearchFiles
             if (e.ChangeType != WatcherChangeTypes.Renamed)
                 return;
 
-            if (File.Exists(e.FullPath)
-                && !IsPattern(e.Name))
+            var newName = Path.GetFileName(e.FullPath);
+
+            if (CheckChangeObject(e.FullPath, newName))
                     return;
 
-            ChangeTreeView(RenameNode, e.OldName, e.Name);
+            var pathChange = GetPath(e.OldFullPath);
+
+            ChangeTreeView(RenameNode, pathChange, newName);
         }
 
         private void RenameNode(TreeNode changeNode, string newName)
@@ -72,7 +74,7 @@ namespace DesktopAppSearchFiles
         private void DeleteNode(TreeNode changeNode, string _)
             => changeNode.Nodes.Remove(changeNode);
 
-        private void ChangeTreeView(Action<TreeNode, string> changeAction, string searchNode, string newNode)
+        private void ChangeTreeView(Action<TreeNode, string> changeAction, string pathChange, string newNode)
         {
             if (filesTreeView.InvokeRequired)
                 filesTreeView.Invoke(new Action(() => Change()));
@@ -83,7 +85,7 @@ namespace DesktopAppSearchFiles
             {
                 try
                 {
-                    var changeNode = TreeNodeHelper.GetNode(filesTreeView.Nodes, searchNode);
+                    var changeNode = TreeNodeHelper.GetNode(filesTreeView.Nodes, pathChange);
                     filesTreeView.BeginUpdate();
                     changeAction.Invoke(changeNode, newNode);
                     filesTreeView.EndUpdate();
@@ -98,7 +100,14 @@ namespace DesktopAppSearchFiles
             }
         }
 
-        private bool IsPattern(string checkFile)
-            => Regex.IsMatch(checkFile, SearchFilesPattern);
+        private bool CheckChangeObject(string path, string node)
+            => File.Exists(path) && !Regex.IsMatch(node, SearchFilesPattern);
+
+        private string GetPath(string path)
+        {
+            var nameStart = Path.GetFileName(StartDirectory);
+
+            return path.Substring(path.IndexOf(nameStart));
+        }
     }
 }
