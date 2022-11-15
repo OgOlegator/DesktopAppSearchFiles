@@ -54,7 +54,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.startDirectoryTextBox.Location = new System.Drawing.Point(187, 5);
             this.startDirectoryTextBox.Name = "startDirectoryTextBox";
-            this.startDirectoryTextBox.Size = new System.Drawing.Size(341, 27);
+            this.startDirectoryTextBox.Size = new System.Drawing.Size(403, 27);
             this.startDirectoryTextBox.TabIndex = 0;
             // 
             // label1
@@ -81,13 +81,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.searchFilesTextBox.Location = new System.Drawing.Point(187, 37);
             this.searchFilesTextBox.Name = "searchFilesTextBox";
-            this.searchFilesTextBox.Size = new System.Drawing.Size(441, 27);
+            this.searchFilesTextBox.Size = new System.Drawing.Size(503, 27);
             this.searchFilesTextBox.TabIndex = 3;
             // 
             // searchButton
             // 
             this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchButton.Location = new System.Drawing.Point(378, 71);
+            this.searchButton.Location = new System.Drawing.Point(440, 71);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(122, 29);
             this.searchButton.TabIndex = 4;
@@ -102,13 +102,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.filesTreeView.Location = new System.Drawing.Point(11, 107);
             this.filesTreeView.Name = "filesTreeView";
-            this.filesTreeView.Size = new System.Drawing.Size(617, 281);
+            this.filesTreeView.Size = new System.Drawing.Size(679, 281);
             this.filesTreeView.TabIndex = 5;
             // 
             // stopSearchButton
             // 
             this.stopSearchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stopSearchButton.Location = new System.Drawing.Point(506, 71);
+            this.stopSearchButton.Location = new System.Drawing.Point(568, 71);
             this.stopSearchButton.Name = "stopSearchButton";
             this.stopSearchButton.Size = new System.Drawing.Size(122, 29);
             this.stopSearchButton.TabIndex = 6;
@@ -199,7 +199,8 @@
             // 
             // buttonSelectFileInPC
             // 
-            this.buttonSelectFileInPC.Location = new System.Drawing.Point(534, 4);
+            this.buttonSelectFileInPC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSelectFileInPC.Location = new System.Drawing.Point(597, 4);
             this.buttonSelectFileInPC.Name = "buttonSelectFileInPC";
             this.buttonSelectFileInPC.Size = new System.Drawing.Size(94, 29);
             this.buttonSelectFileInPC.TabIndex = 16;
@@ -211,7 +212,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(646, 485);
+            this.ClientSize = new System.Drawing.Size(708, 485);
             this.Controls.Add(this.buttonSelectFileInPC);
             this.Controls.Add(this.labelTimeAfterStartSearch);
             this.Controls.Add(this.labelCountFiles);

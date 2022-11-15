@@ -69,10 +69,18 @@ namespace DesktopAppSearchFiles
             => changeNode.Text = newName;
 
         private void CreateNode(TreeNode changeNode, string newName)
-            => changeNode.Nodes.Add(newName);
+        { 
+            changeNode.Nodes.Add(newName);
+
+            PlusCounter();
+        }
 
         private void DeleteNode(TreeNode changeNode, string _)
-            => changeNode.Nodes.Remove(changeNode);
+        {
+            changeNode.Nodes.Remove(changeNode);
+
+            MinusCounter();
+        }
 
         private void ChangeTreeView(Action<TreeNode, string> changeAction, string pathChange, string newNode)
         {
@@ -108,6 +116,18 @@ namespace DesktopAppSearchFiles
             var nameStart = Path.GetFileName(StartDirectory);
 
             return path.Substring(path.IndexOf(nameStart));
+        }
+
+        private void PlusCounter()
+        {
+            CountFiles = (int.Parse(CountFiles) + 1).ToString();
+            CountFilesFound = (int.Parse(CountFilesFound) + 1).ToString();
+        }
+
+        private void MinusCounter()
+        {
+            CountFiles = (int.Parse(CountFiles) - 1).ToString();
+            CountFilesFound = (int.Parse(CountFilesFound) - 1).ToString();
         }
     }
 }

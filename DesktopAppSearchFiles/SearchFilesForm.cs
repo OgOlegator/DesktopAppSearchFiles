@@ -45,20 +45,19 @@ namespace DesktopAppSearchFiles
                 MessageBox.Show("Перед началом поиска установите значение стартовой директории");
                 return;
             }    
+
+            if(!Directory.Exists(StartDirectory))
+            {
+                MessageBox.Show("Установите корректное значение стартовой директории");
+                return;
+            }
             
             _stopSearching = false;
 
             StartTimer();
 
-            try
-            {
-                SetEventFileSystemWatcher();
-            }
-            catch (ArgumentException)
-            {
-                MessageBox.Show("Установите корректное значение стартовой директории");
-                return;
-            }
+            //todo Выделить в отдельный поток и добавить учет cancelToken
+            SetEventFileSystemWatcher();
 
             SetDirectoryTreeView();
 
