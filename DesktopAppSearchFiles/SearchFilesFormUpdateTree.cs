@@ -95,7 +95,7 @@ namespace DesktopAppSearchFiles
                     var result = MessageBox.Show("Не удалось обновить дерево файлов. Обновить повторно?", "Error", MessageBoxButtons.OKCancel);
                     
                     if(result == DialogResult.OK)
-                        SetDirectoryTreeView();         // В случае ошибки происходит глобальное обновление дерева.
+                        SetDirectoryTreeView(); // В случае ошибки по решению пользователя происходит глобальное обновление дерева.
                 }
             }
         }
