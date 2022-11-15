@@ -146,10 +146,7 @@ namespace DesktopAppSearchFiles
             using (var folderBrowserDialog = new FolderBrowserDialog())
             {
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-                {
-                    //Get the path of specified file
                     StartDirectory = folderBrowserDialog.SelectedPath;
-                }
             }
         }
     }
