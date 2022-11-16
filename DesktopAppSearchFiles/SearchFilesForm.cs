@@ -19,14 +19,28 @@ namespace DesktopAppSearchFiles
         private string CountFiles
         {
             get => labelCountFiles.Text;
-            set => labelCountFiles.Text = value;
+            set
+            {
+                if (labelCountFiles.InvokeRequired)
+                    labelCountFiles.Invoke(new Action(() => labelCountFiles.Text = value));
+                else
+                    labelCountFiles.Text = value;
+            }
         }
 
         private string CountFilesFound
         {
             get => labelCountFilesFound.Text;
-            set => labelCountFilesFound.Text = value;
+            set 
+            {
+                if (labelCountFilesFound.InvokeRequired)
+                    labelCountFiles.Invoke(new Action(() => labelCountFilesFound.Text = value));
+                else
+                    labelCountFilesFound.Text = value;
+            }
         }
+
+        private FileSystemWatcher _watcher;
 
         private bool _stopSearching = true;
         private Stopwatch _stopwatch = new Stopwatch();                     // секундомер
@@ -58,31 +72,24 @@ namespace DesktopAppSearchFiles
 
             StartTimer();
 
-            SetDirectoryTreeView();
-
-            SetEventFileSystemWatcher();
+            ResetTree();
 
             FillAdditionalInfo();
-        }
-
-        private void SetDirectoryTreeView()
-        {
-            filesTreeView.Nodes.Clear();
-
-            var treeNode = new TreeNode { Text = Path.GetFileName(StartDirectory) };
-
-            DirectoryHelper.Fill(treeNode, StartDirectory, SearchFilesPattern, out var countFiles, out var countFilesFound);
-
-            CountFiles = countFiles.ToString();
-            CountFilesFound = countFilesFound.ToString();
-
-            filesTreeView.Nodes.Add(treeNode);
         }
 
         private void stopSearchButton_Click(object sender, EventArgs e)
         {
             _stopSearching = true;
-            _watcher.Dispose();
+            _watcher?.Dispose();
+            
+            try
+            {
+                _cancel?.Cancel();
+            }
+            catch (ObjectDisposedException ex)
+            {
+                //OK
+            }
         }
 
         private void SearchFilesForm_FormClosing(object sender, FormClosingEventArgs e)
