@@ -28,6 +28,8 @@ namespace DesktopAppSearchFiles
             set => labelCountFilesFound.Text = value;
         }
 
+        private FileSystemWatcher _watcher;
+
         private bool _stopSearching = true;
         private Stopwatch _stopwatch = new Stopwatch();                     // секундомер
 
@@ -56,28 +58,9 @@ namespace DesktopAppSearchFiles
 
             StartTimer();
 
-            //todo Выделить в отдельный поток и добавить учет cancelToken
-            SetEventFileSystemWatcher();
-
-            SetDirectoryTreeView();
+            ResetTree();
 
             FillAdditionalInfo();
-        }
-
-        private FileSystemWatcher _watcher;
-
-        private void SetDirectoryTreeView()
-        {
-            filesTreeView.Nodes.Clear();
-
-            var treeNode = new TreeNode { Text = Path.GetFileName(StartDirectory) };
-
-            DirectoryHelper.Fill(treeNode, StartDirectory, SearchFilesPattern, out var countFiles, out var countFilesFound);
-
-            CountFiles = countFiles.ToString();
-            CountFilesFound = countFilesFound.ToString();
-
-            filesTreeView.Nodes.Add(treeNode);
         }
 
         private void stopSearchButton_Click(object sender, EventArgs e)
