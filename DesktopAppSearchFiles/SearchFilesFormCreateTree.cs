@@ -9,81 +9,116 @@ namespace DesktopAppSearchFiles
 {
     public partial class SearchFilesForm
     {
+        private CancellationTokenSource _cancel;
 
         private void ResetTree()
         {
             filesTreeView.Nodes.Clear();
 
-            //todo Выделить в отдельный поток и добавить учет cancelToken
-            var cancelTokenSource = new CancellationTokenSource();
-            var token = cancelTokenSource.Token;
-
+            _cancel = new CancellationTokenSource();
+            var token = _cancel.Token;
+            
             var task = new Task(() => SetDirectoryTreeView(), token);
             task.Start();
 
             void SetDirectoryTreeView()
             {
-                var treeNode = new TreeNode { Text = Path.GetFileName(StartDirectory) };
+                try
+                {
+                    var directoryTree = new DirectoryTreeNode(StartDirectory, SearchFilesPattern).AddCancel(token);
+                    var tree = directoryTree.Get();
 
-                Fill(treeNode, token, StartDirectory, SearchFilesPattern, out var countFiles, out var countFilesFound);
+                    if (token.IsCancellationRequested)
+                        return;
 
-                if (token.IsCancellationRequested)
-                    return;
+                    filesTreeView.Invoke(new Action(() => filesTreeView.Nodes.Add(tree)));
 
-                filesTreeView.Invoke(new Action(() => filesTreeView.Nodes.Add(treeNode)));
-                labelCountFiles.Invoke(new Action(() => CountFiles = countFiles.ToString()));
-                labelCountFilesFound.Invoke(new Action(() => CountFilesFound = countFilesFound.ToString()));
-
-                SetEventFileSystemWatcher();    //Начало отслеживания обновлений указанной директории
+                    CountFiles = directoryTree.GetCountFiles().ToString();
+                    CountFilesFound = directoryTree.GetCountFoundFiles().ToString();
+                }
+                finally
+                {
+                    _cancel?.Dispose();
+                    SetEventFileSystemWatcher();    //Начало отслеживания обновлений указанной директории
+                }
             }
         }
 
-        private void Fill(TreeNode directoryNode, CancellationToken token, string directory, string searchPattern,
-                            out int countFiles, out int countFoundFiles)
+        private class DirectoryTreeNode
         {
-            countFoundFiles = 0;
-            countFiles = 0;
-            string[] fileEntries;
+            private readonly string _directorySearch;
+            private readonly string _searchPattern;
+            private CancellationToken _token;
+            private int _countFiles = 0;
+            private int _countFoundFiles = 0;
 
-            try
+            public DirectoryTreeNode(string directorySearch, string searchPattern = null)
             {
-                fileEntries = Directory.GetFiles(directory);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return;
-            }
-
-            countFoundFiles = 0;
-            countFiles = fileEntries.Count();
-
-            foreach (var fileName in fileEntries
-                .Where(name => Regex.IsMatch(name, searchPattern))
-                .Select(name => Path.GetFileName(name)))
-            {
-                directoryNode.Nodes.Add(fileName);
-                countFoundFiles++;
+                _directorySearch = directorySearch;
+                _searchPattern = searchPattern;
             }
 
-            var subdirectories = Directory.GetDirectories(directory);
-
-            // Рекурсивный поиск файлов в sub-директории 
-            if (subdirectories.Count() == 0)
-                return;
-
-            foreach (var subdirectory in subdirectories)
+            public DirectoryTreeNode AddCancel(CancellationToken token)
             {
-                if (token.IsCancellationRequested)
+                _token = token;
+                return this;
+            }
+
+            public TreeNode Get()
+            {
+                var treeNode = new TreeNode { Text = Path.GetFileName(_directorySearch) };
+
+                GetChildNode(treeNode, _directorySearch);
+
+                return treeNode;
+            }
+
+            public int GetCountFiles()
+                => _countFiles;
+
+            public int GetCountFoundFiles()
+                => _countFoundFiles;
+
+            private void GetChildNode(TreeNode directoryNode, string directory)
+            {
+                string[] fileEntries;
+
+                try
+                {
+                    fileEntries = Directory.GetFiles(directory);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    return;
+                }
+
+                _countFiles += fileEntries.Count();
+
+                foreach (var fileName in fileEntries
+                    .Where(name => Regex.IsMatch(name, _searchPattern))
+                    .Select(name => Path.GetFileName(name)))
+                {
+                    directoryNode.Nodes.Add(fileName);
+                    _countFoundFiles++;
+                }
+
+                var subdirectories = Directory.GetDirectories(directory);
+
+                // Рекурсивный поиск файлов в sub-директории 
+                if (subdirectories.Count() == 0)
                     return;
 
-                var subDirNode = new TreeNode { Text = Path.GetFileName(subdirectory) };
+                foreach (var subdirectory in subdirectories)
+                {
+                    if (_token.IsCancellationRequested)
+                        return;
 
-                Fill(subDirNode, token, subdirectory, searchPattern, out var countSubFiles, out var countSubFoundFiles);
+                    var subDirNode = new TreeNode { Text = Path.GetFileName(subdirectory) };
 
-                countFiles += countSubFiles;
-                countFoundFiles += countSubFoundFiles;
+                    GetChildNode(subDirNode, subdirectory);
 
-                directoryNode.Nodes.Add(subDirNode);
+                    directoryNode.Nodes.Add(subDirNode);
+                }
             }
         }
     }

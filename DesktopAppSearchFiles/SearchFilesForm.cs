@@ -19,13 +19,25 @@ namespace DesktopAppSearchFiles
         private string CountFiles
         {
             get => labelCountFiles.Text;
-            set => labelCountFiles.Text = value;
+            set
+            {
+                if (labelCountFiles.InvokeRequired)
+                    labelCountFiles.Invoke(new Action(() => labelCountFiles.Text = value));
+                else
+                    labelCountFiles.Text = value;
+            }
         }
 
         private string CountFilesFound
         {
             get => labelCountFilesFound.Text;
-            set => labelCountFilesFound.Text = value;
+            set 
+            {
+                if (labelCountFilesFound.InvokeRequired)
+                    labelCountFiles.Invoke(new Action(() => labelCountFilesFound.Text = value));
+                else
+                    labelCountFilesFound.Text = value;
+            }
         }
 
         private FileSystemWatcher _watcher;
@@ -66,7 +78,16 @@ namespace DesktopAppSearchFiles
         private void stopSearchButton_Click(object sender, EventArgs e)
         {
             _stopSearching = true;
-            _watcher.Dispose();
+            _watcher?.Dispose();
+            
+            try
+            {
+                _cancel?.Cancel();
+            }
+            catch (ObjectDisposedException ex)
+            {
+                //OK
+            }
         }
 
         private void SearchFilesForm_FormClosing(object sender, FormClosingEventArgs e)
