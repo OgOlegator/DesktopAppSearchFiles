@@ -45,8 +45,6 @@ namespace DesktopAppSearchFiles
         private bool _stopSearching = true;
         private Stopwatch _stopwatch = new Stopwatch();                     // секундомер
 
-        private FileSystemWatcher _watcher;
-
         public SearchFilesForm()
         {
             InitializeComponent();
