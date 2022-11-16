@@ -31,6 +31,8 @@ namespace DesktopAppSearchFiles
         private bool _stopSearching = true;
         private Stopwatch _stopwatch = new Stopwatch();                     // секундомер
 
+        private FileSystemWatcher _watcher;
+
         public SearchFilesForm()
         {
             InitializeComponent();
@@ -56,15 +58,12 @@ namespace DesktopAppSearchFiles
 
             StartTimer();
 
-            //todo Выделить в отдельный поток и добавить учет cancelToken
-            SetEventFileSystemWatcher();
-
             SetDirectoryTreeView();
+
+            SetEventFileSystemWatcher();
 
             FillAdditionalInfo();
         }
-
-        private FileSystemWatcher _watcher;
 
         private void SetDirectoryTreeView()
         {
