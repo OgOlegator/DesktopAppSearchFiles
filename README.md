@@ -16,4 +16,4 @@
 
 Приложение написано на .Net 6.
 Если не удается собрать решение из-за отсутствия SDK, то попробуйте собрать то же самое приложение, написанное на .Net Framework 4.7.2:
-https://github.com/OgOlegator/DesktopAppSearchFiles
+https://github.com/OgOlegator/DesktopAppSearchFilesV2
